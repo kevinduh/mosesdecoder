@@ -126,6 +126,10 @@
 #include "moses/LM/oxlm/SourceOxLM.h"
 #endif
 
+#ifdef LM_CNNLM
+#include "moses/LM/cnnlm/cnnlm.h"
+#endif
+
 #include "util/exception.hh"
 
 #include <vector>
@@ -324,6 +328,10 @@ FeatureRegistry::FeatureRegistry()
   MOSES_FNAME2("OxFactoredMaxentLM", OxLM<oxlm::FactoredMaxentLM>);
   MOSES_FNAME2("OxSourceFactoredLM", SourceOxLM);
   MOSES_FNAME2("OxTreeLM", OxLM<oxlm::FactoredTreeLM>);
+#endif
+
+#ifdef LM_CNNLM
+  MOSES_FNAME2("cnnlm", cnnlm);
 #endif
 
   Add("KENLM", new KenFactory());

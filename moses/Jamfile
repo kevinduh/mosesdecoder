@@ -18,12 +18,21 @@ if $(with-oxlm) {
   oxlm = ;
 }
 
+with-cnnlm = [ option.get "with-cnnlm" ] ; 
+with-eigen = [ option.get "with-eigen" ] ; 
+if $(with-cnnlm) {
+    #cnnlm = <cxxflags>-std=c++0x <define>LM_CNNLM <include>$(with-cnnlm)/ <include>$(with-eigen) ;
+    cnnlm = <cxxflags>-std=c++11 <define>EIGEN_FAST_MATH <define>LM_CNNLM <include>$(with-cnnlm)/ <include>$(with-eigen) ;
+} else {
+  cnnlm = ;
+}
+
 local classifier = ;
 if [ option.get "with-vw" ] {
   classifier += ..//vw//classifier ;
 }
 
-alias headers : ../util//kenutil $(classifier) : : : $(max-factors) $(dlib) $(oxlm) ; 
+alias headers : ../util//kenutil $(classifier) : : : $(max-factors) $(dlib) $(oxlm) $(cnnlm) ; 
 alias ThreadPool : ThreadPool.cpp ;
 alias Util : Util.cpp Timer.cpp ;
 

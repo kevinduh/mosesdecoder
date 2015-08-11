@@ -136,6 +136,21 @@ if $(with-dalm) {
 #ORLM is always compiled but needs special headers
 obj ORLM.o : ORLM.cpp ..//headers ../TranslationModel/DynSAInclude//dynsa : : : <include>../TranslationModel/DynSAInclude ;
 
+
+#cnnlm
+local with-cnnlm = [ option.get "with-cnnlm" ] ;
+local with-eigen = [ option.get "with-eigen" ] ;
+if $(with-cnnlm) {
+  lib cnn : : <search>$(with-cnnlm)/build/cnn ;
+  obj cnnlm.o : cnnlm/cnnlm.cpp cnn ..//headers : <include>$(with-cnnlm) <include>$(with-eigen) ;
+  #  alias cnnlm : cnnlm.o cnn : : : <cxxflags>-std=c++0x <define>LM_CNNLM ;
+  alias cnnlm : cnnlm.o cnn : : : <cxxflags>-std=c++11 <define>EIGEN_FAST_MATH <define>LM_CNNLM ;
+  dependencies += cnnlm ;
+  lmmacros += LM_CNNLM ;
+
+}
+
+
 #Top-level LM library.  If you've added a file that doesn't depend on external
 #libraries, put it here.  
 alias LM : Backward.cpp BackwardLMState.cpp Base.cpp BilingualLM.cpp Implementation.cpp Ken.cpp MultiFactor.cpp Remote.cpp SingleFactor.cpp SkeletonLM.cpp ORLM.o
